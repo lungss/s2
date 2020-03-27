@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+    xmlns:cxf="http://camel.apache.org/schema/cxf"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="      http://camel.apache.org/schema/cxf http://camel.apache.org/schema/cxf/camel-cxf.xsd      http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd        http://camel.apache.org/schema/spring       https://camel.apache.org/schema/spring/camel-spring.xsd">
+    <cxf:cxfEndpoint address="/s2" id="mycxf" serviceClass="org.example.s2.S2"/>
+    <camelContext id="camel" xmlns="http://camel.apache.org/schema/spring">
+        <route id="s2">
+            <from id="cxf:bean:mycxf" uri="cxf:bean:mycxf"/>
+            <log id="_log1" message="s2 soap received: ${body[0]}"/>
+            <setBody id="_setBody1">
+                <simple>ref:response</simple>
+            </setBody>
+        </route>
+    </camelContext>
+    <bean class="org.example.s2.S2Response" id="response">
+        <property name="return1" value="value1 s2"/>
+        <property name="return2" value="value2 s2"/>
+    </bean>
+</beans>
